@@ -2,7 +2,6 @@
 
 class Logins extends CI_Controller 
 {
-	// protected $show = array();
 	public function __construct()
 	{
 		parent::__construct();
@@ -21,10 +20,20 @@ class Logins extends CI_Controller
 		$this->form_validation->set_rules('password', 'Password', 'required|trim|min_length[8]|md5');
 		$this->form_validation->set_rules('com_password', 'Comfirm Password', 'required|trim|matches[password]|md5');
 		if($this->form_validation->run() == true)
-		{		
-			$this->login->add_user($this->input->post());
-			$this->session->set_userdata('user_data', $this->input->post());
-			redirect('/logins/profile');
+		{	
+			$exist_email = $this->login->check_email($this->input->post());
+			if($exist_email)
+			{
+				$this->session->set_flashdata('reg_errors', "This email has been registered already!");
+				redirect('/');
+			}
+			else
+			{
+				$this->login->add_user($this->input->post());
+				$this->session->set_userdata('user_data', $this->input->post());
+				redirect('/logins/profile');
+			}
+
 		}
 		else
 		{
@@ -47,10 +56,6 @@ class Logins extends CI_Controller
 			$infos = $this->login->get_email($this->input->post());
 			if($infos)
 			{	
-				// $show = array('first_name' => $infos['first_name'],
-				// 		'last_name' => $infos['last_name'],
-				// 		'email' => $infos['email'],
-				// 		'log_in' => TRUE);
 				$this->session->set_userdata('user_data', $infos);
 				redirect('/logins/profile');
 			}
@@ -65,9 +70,6 @@ class Logins extends CI_Controller
 			$this->session->set_flashdata('errors', "email and/or password can not be empty!");
 			redirect('/');
 		}
-		// $email = $this->input->post('email');
-		// $password = md5($this->input->post('password'));
-
 	}
 	public function profile()
 	{

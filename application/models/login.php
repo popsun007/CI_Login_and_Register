@@ -14,5 +14,10 @@ class login extends CI_Model
 		$value = array($post['email'], $post['password']);
 		return $this->db->query($query, $value)->row_array();
 	}
+	function check_email($post)
+	{
+		$query = "SELECT * FROM users WHERE email=?";
+		return $this->db->query($query, array($post['email']))->row_array();
+	}
 }
 ?>
