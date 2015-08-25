@@ -62,6 +62,7 @@
 	        			</tr>
 	        		</table>
         		</form>
+        		<div style="color:red;"><?= $this->session->flashdata('reg_errors'); ?> </div>
         	</div>
         </div>
     </body>

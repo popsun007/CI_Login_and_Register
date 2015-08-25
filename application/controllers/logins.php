@@ -14,9 +14,23 @@ class Logins extends CI_Controller
 	}
 	public function register()
 	{
-		$this->login->add_user($this->input->post());
-		$this->session->set_userdata('user_data', $this->input->post());
-		redirect('/logins/profile');
+		$this->load->library('form_validation');
+		$this->form_validation->set_rules('first_name', 'First Name', 'trim|required|min_length[3]');
+		$this->form_validation->set_rules('last_name', 'Last Name', 'required|trim');
+		$this->form_validation->set_rules('email', 'Email', 'trim|valid_email|required');
+		$this->form_validation->set_rules('password', 'Password', 'required|trim|min_length[8]|md5');
+		$this->form_validation->set_rules('com_password', 'Comfirm Password', 'required|trim|matches[password]|md5');
+		if($this->form_validation->run() == true)
+		{		
+			$this->login->add_user($this->input->post());
+			$this->session->set_userdata('user_data', $this->input->post());
+			redirect('/logins/profile');
+		}
+		else
+		{
+			$this->session->set_flashdata('reg_errors', validation_errors());
+			redirect('/');
+		}
 	}
 	public function log_off()
 	{
@@ -25,23 +39,35 @@ class Logins extends CI_Controller
 	}
 	public function log_in()
 	{
-		$email = $this->input->post('email');
-		$password = md5($this->input->post('password'));
-		$infos = $this->login->get_email($email, $password);
-		if($infos)
+		$this->load->library('form_validation');
+		$this->form_validation->set_rules('email', 'Email', 'required|trim|vaild_email');
+		$this->form_validation->set_rules('password', 'Password', 'trim|required|md5');
+		if($this->form_validation->run() ===true)
 		{
-			$show = array('first_name' => $infos['first_name'],
-					'last_name' => $infos['last_name'],
-					'email' => $infos['email'],
-					'log_in' => TRUE);
-			$this->session->set_userdata('user_data', $show);
-			redirect('/logins/profile');
+			$infos = $this->login->get_email($this->input->post());
+			if($infos)
+			{	
+				// $show = array('first_name' => $infos['first_name'],
+				// 		'last_name' => $infos['last_name'],
+				// 		'email' => $infos['email'],
+				// 		'log_in' => TRUE);
+				$this->session->set_userdata('user_data', $infos);
+				redirect('/logins/profile');
+			}
+			else
+			{
+				$this->session->set_flashdata('errors', "email and/or password is not match!");
+				redirect('/');
+			}
 		}
 		else
 		{
-			$this->session->set_flashdata('errors', "email or password is not match!");
+			$this->session->set_flashdata('errors', "email and/or password can not be empty!");
 			redirect('/');
 		}
+		// $email = $this->input->post('email');
+		// $password = md5($this->input->post('password'));
+
 	}
 	public function profile()
 	{
