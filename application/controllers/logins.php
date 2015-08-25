@@ -33,7 +33,6 @@ class Logins extends CI_Controller
 				$this->session->set_userdata('user_data', $this->input->post());
 				redirect('/logins/profile');
 			}
-
 		}
 		else
 		{

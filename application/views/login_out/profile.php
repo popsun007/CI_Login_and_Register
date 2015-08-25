@@ -1,9 +1,4 @@
 <!DOCTYPE html>
-<?php 
-		var_dump($this->session->userdata);
-		// die();
-echo $this->session->userdata('first_name');
- ?>
 <html lang='en'>
     <head>
         <meta charset="utf-8">
