@@ -1,4 +1,9 @@
 <!DOCTYPE html>
+<?php 
+		var_dump($this->session->userdata);
+		// die();
+echo $this->session->userdata('first_name');
+ ?>
 <html lang='en'>
     <head>
         <meta charset="utf-8">
@@ -12,22 +17,22 @@
     </head>
     <body>
         <div class="container">
-        	<div style="float: right"><a href="">Log off</a></div>
-        	<h1>Welcome <?= $first_name ?>!</h1>
+        	<div style="float: right"><a href="/logins/log_off">Log off</a></div>
+        	<h1>Welcome <?= $user_data['first_name']; ?>!</h1>
         	<div class="jumbotron">
         		<h2>User Information</h2>
         		<table>
         			<tr>
         				<td>First Name:</td>
-        				<td><?= $first_name; ?></td>
+        				<td><?= $user_data['first_name']; ?></td>
         			</tr>
         			<tr>
         				<td>Last Name:</td>
-        				<td><?= $last_name; ?></td>
+        				<td><?= $user_data['last_name']; ?></td>
         			</tr>
         			<tr>
         				<td>Email Address:</td>
-        				<td><?= $email; ?></td>
+        				<td><?= $user_data['email']; ?></td>
         			</tr>
         		</table>
         	</div>

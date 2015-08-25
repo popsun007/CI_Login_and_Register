@@ -15,7 +15,7 @@
         	<br>
         	<div class="jumbotron">
         		<h2>Log In</h2>
-        		<form action="process.php" method="post">
+        		<form action="/logins/log_in" method="post">
 	        		<table>
 	        			<tr>
 	        				<td>Email:</td>
@@ -31,6 +31,7 @@
 	        			</tr>
 	        		</table>
         		</form>
+        		<div style="color:red;"><?= $this->session->flashdata('errors'); ?> </div>
         	</div>
         	<div class="jumbotron">
         		<h2>Or Register</h2>
